@@ -14,6 +14,34 @@ const config = {
 
 firebase.initializeApp(config);
 
+export const createUsersProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) {
+    return;
+  }
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`); //получаем ссылку на объект(документ) по указанному пути
+
+  const snapShot = await userRef.get(); //получаем снимок объекта (список доступных полей)
+
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth; //userAuth - большой объект возвращаемый API firebase
+    const createdTime = new Date();
+
+    try {
+      await userRef.set({
+        // метод firebase, позволяющий сохранить данные в БД
+        displayName,
+        email,
+        createdTime,
+        ...additionalData
+      });
+    } catch (error) {
+      console.log("error creating user ", error.message);
+    }
+    return userRef;
+  }
+};
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 const provider = new firebase.auth.GoogleAuthProvider();

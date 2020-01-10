@@ -6,7 +6,7 @@ import ShopPage from "./pages/shop/shopPage.component";
 import Header from "./components/header/header.component";
 import SignInAndSignUpPage from "./components/sign-in-and-sign-up/sign-in-and-sign-up.component";
 
-import { auth } from "./firebase/firebase.utils";
+import { auth, createUsersProfileDocument } from "./firebase/firebase.utils";
 
 import "./App.css";
 
@@ -21,10 +21,21 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user });
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = createUsersProfileDocument(userAuth);
 
-      console.log(user);
+        await userRef.onSnapshot(snapShot => {
+          this.setState({
+            currentUser: {
+              id: snapShot.id, // у снимка (snapShot) базы по пути /users/'currUser' забираем необходимые поля
+              ...snapShot.data() // метод позволяющий забрать вложенную информация о конкретном объекте из БД (в данном случае из  user)
+            }
+          });
+        });
+      }
+
+      this.setState({ currentUser: userAuth }); // если user не залогинился, значит он не существует и выполниться установка null
     });
   }
 
