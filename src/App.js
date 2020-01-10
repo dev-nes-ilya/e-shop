@@ -32,7 +32,6 @@ class App extends React.Component {
               ...snapShot.data() // метод позволяющий забрать вложенную информация о конкретном объекте из БД (в данном случае из  user)
             }
           });
-          console.log(this.state);
         });
       }
 
