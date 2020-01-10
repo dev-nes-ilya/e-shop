@@ -23,15 +23,16 @@ class App extends React.Component {
   componentDidMount() {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
-        const userRef = createUsersProfileDocument(userAuth);
+        const userRef = await createUsersProfileDocument(userAuth);
 
-        await userRef.onSnapshot(snapShot => {
+        userRef.onSnapshot(snapShot => {
           this.setState({
             currentUser: {
               id: snapShot.id, // у снимка (snapShot) базы по пути /users/'currUser' забираем необходимые поля
               ...snapShot.data() // метод позволяющий забрать вложенную информация о конкретном объекте из БД (в данном случае из  user)
             }
           });
+          console.log(this.state);
         });
       }
 
