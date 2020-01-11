@@ -1,7 +1,7 @@
-import { CombineReducers } from "react-redux";
+import { combineReducers } from "redux";
 
 import userReducer from "./user/user.reducer";
 
-export default CombineReducers({
+export default combineReducers({
   user: userReducer
 });
