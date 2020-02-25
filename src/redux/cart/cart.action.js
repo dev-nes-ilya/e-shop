@@ -13,7 +13,12 @@ export const removeItem = item => ({
   type: types.REMOVE_ITEM,
   payload: item
 });
+
 export const clearItem = item => ({
   type: types.CLEAR_ITEM,
   payload: item
+});
+
+export const resetCart = () => ({
+  type: types.RESET_CART,
 });
