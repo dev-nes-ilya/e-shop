@@ -8,7 +8,6 @@ export const CollectionItemContainer = styled.div`
   height: 350px;
   align-items: center;
   position: relative;
-  
 
   &:hover {
     .image {
@@ -44,6 +43,7 @@ export const CollectionFooterContainer = styled.div`
   display: flex;
   justify-content: space-between;
   font-size: 18px;
+  margin-bottom: 10px;
 `;
 
 export const NameContainer = styled.span`

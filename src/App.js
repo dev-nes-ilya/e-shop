@@ -11,7 +11,7 @@ import CheckoutPage from "./pages/checkout/checkout.component";
 
 import { selectCurrentUser } from "./redux/user/user.selector";
 
-import { setCurrentUser } from "./redux/user/user.action";
+import { checkUserSession } from "./redux/user/user.action";
 
 import { auth, createUsersProfileDocument } from "./firebase/firebase.utils";
 
@@ -21,23 +21,8 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      if (userAuth) {
-        const userRef = await createUsersProfileDocument(userAuth);
-
-        userRef.onSnapshot(snapShot => {
-          setCurrentUser({
-            currentUser: {
-              id: snapShot.id, // у снимка (snapShot) базы по пути /users/'currUser' забираем необходимые поля
-              ...snapShot.data() // метод позволяющий забрать вложенную информация о конкретном объекте из БД (в данном случае из  user)
-            }
-          });
-        });
-      }
-
-      setCurrentUser(userAuth); // если user не залогинился, значит он не существует и выполниться установка null
-    });
+    const { checkUserSession } = this.props;
+    checkUserSession();
   }
 
   componentWillUnmount() {
@@ -74,7 +59,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+  checkUserSession: user => dispatch(checkUserSession(user))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
