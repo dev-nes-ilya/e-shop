@@ -41,9 +41,7 @@ export const signOutFailure = error => ({
   payload: error
 });
 
-export const signUpStart = (data) => {
-  console.log('signUpStart data', data);
-  
+export const signUpStart = (data) => {  
   return {
     type: types.SIGN_UP_START,
     payload: data
