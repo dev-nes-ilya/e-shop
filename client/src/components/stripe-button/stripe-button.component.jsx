@@ -1,11 +1,15 @@
 import React from "react";
-import axios from 'axios'
+import axios from "axios";
+import { useDispatch } from "react-redux";
+
+import { paySuccess } from "../../redux/cart/cart.action";
 
 import StripeCheckout from "react-stripe-checkout";
 
 const StripeCheckoutButton = ({ price }) => {
   const priceForStripe = price * 100;
-  const publishableKey = "pk_test_xuvb3R7YEyVqhbF4VaoEySCw00gKlRMrDZ";
+  const publishableKey = "pk_test_tsuiYAy5gShK9fTFLmQdCYhD00D1VzkZ9S";
+  const dispatch = useDispatch();
 
   const onToken = token => {
     axios({
@@ -16,12 +20,16 @@ const StripeCheckoutButton = ({ price }) => {
         token
       }
     })
-      .then(response => alert("Payment successful"))
+      .then(response => {
+        dispatch(paySuccess());
+        alert("Payment successful");
+      })
       .catch(error => {
-        console.log("Payment error: ", JSON.parse(error));
-        alert("There was an issue with you payment. Pleas sure, that you use a provided credit card.")
+        console.log("Payment error: ", error);
+        alert(
+          "There was an issue with you payment. Pleas sure, that you use a provided credit card."
+        );
       });
-
   };
 
   return (

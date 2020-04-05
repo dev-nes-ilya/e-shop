@@ -20,5 +20,9 @@ export const clearItem = item => ({
 });
 
 export const resetCart = () => ({
-  type: types.RESET_CART,
+  type: types.RESET_CART
+});
+
+export const paySuccess = () => ({
+  type: types.PAY_SUCCESS
 });

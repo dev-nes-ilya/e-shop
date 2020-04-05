@@ -1,17 +1,22 @@
-import { all, call, put, takeLatest } from 'redux-saga/effects'
+import { all, call, put, takeLatest } from "redux-saga/effects";
 
-import { UserActionTypes as types } from "../user/user.types";
+import { UserActionTypes } from "../user/user.types";
+import { CartTypes } from "./cart.types";
 
-import { resetCart } from './cart.action'
+import { resetCart } from "./cart.action";
 
-export function* resetCartListOnSignOut() {
-  yield put(resetCart())
+export function* resetCartList() {
+  yield put(resetCart());
 }
 
 export function* onSignOutSuccess() {
-  yield takeLatest(types.SIGN_OUT_SUCCESS, resetCartListOnSignOut)
+  yield takeLatest(UserActionTypes.SIGN_OUT_SUCCESS, resetCartList);
+}
+
+export function* onPaySuccess() {
+  yield takeLatest(CartTypes.PAY_SUCCESS, resetCartList);
 }
 
 export function* cartSagas() {
-  yield all([call(onSignOutSuccess)])
+  yield all([call(onSignOutSuccess), call(onPaySuccess)]);
 }
